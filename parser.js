@@ -13,7 +13,13 @@ readInterface.on('line', (line) => {
 });
 
 readInterface.on('close', () => {
+  parseTitleToString();
+  parseMovieId();
+  parseMovieTime();
+  parseReleaseDate();
   const content = JSON.stringify(result);
+  console.log(result);
+
   fs.writeFile('./movie.js', content, (err) => {
     if (err) {
       console.log(err);
@@ -22,3 +28,27 @@ readInterface.on('close', () => {
     }
   });
 });
+
+function parseTitleToString() {
+  result.forEach((movie) => {
+    movie.movie_title = movie.movie_title[0];
+  });
+}
+
+function parseMovieId() {
+  result.forEach((movie) => {
+    movie.movie_id = parseInt(movie.movie_id[0].replace('电影-', ''));
+  });
+}
+
+function parseMovieTime() {
+  result.forEach((movie) => {
+    movie.runtime = movie.runtime[0];
+  });
+}
+
+function parseReleaseDate() {
+  result.forEach((movie) => {
+    movie.release_date = movie.release_date[0];
+  });
+}
