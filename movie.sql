@@ -1,3 +1,6 @@
+-- Active: 1683543285042@@81.70.146.18@3306@douban
+DROP TABLE movies;
+
 CREATE TABLE `movies` (
   `country` VARCHAR(255),
   `intro` JSON,

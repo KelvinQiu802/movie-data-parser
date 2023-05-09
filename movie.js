@@ -1,4 +1,4 @@
-[
+const data = [
   {
     country: '美国',
     intro: [
@@ -9515,3 +9515,5 @@
     abstract: '彻底的善与彻底的恶一样没有人性',
   },
 ];
+
+module.exports = data;

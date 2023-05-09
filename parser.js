@@ -3,7 +3,7 @@ const readline = require('readline');
 const extra_info = require('./extra_data');
 
 const readInterface = readline.createInterface({
-  input: fs.createReadStream('./movie.json'),
+  input: fs.createReadStream('./movie_parsed.json'),
   console: false,
 });
 
@@ -19,6 +19,7 @@ readInterface.on('close', () => {
   parseMovieTime();
   parseReleaseDate();
   parseRatingNum();
+  parseGenre();
   addMoreInfo();
   const content = JSON.stringify(result);
 
@@ -84,4 +85,10 @@ function findMovieByIdInExtraInfo(id) {
     }
   }
   return null;
+}
+
+function parseGenre() {
+  result.forEach((movie) => {
+    movie.genre = movie.genre.join('/');
+  });
 }
