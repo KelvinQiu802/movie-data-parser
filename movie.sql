@@ -1,4 +1,4 @@
--- Active: 1683543285042@@81.70.146.18@3306@douban
+-- Active: 1683543285042@@81.70.146.18@3306
 CREATE TABLE `movies` (
   `country` VARCHAR(1024),
   `intro` VARCHAR(1024),
@@ -23,9 +23,60 @@ CREATE TABLE `movies` (
   `abstract` VARCHAR(1024)
 );
 
+CREATE TABLE users (
+  user_name VARCHAR(255) PRIMARY KEY,
+  `password` VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE bookmarks (
+  user_name VARCHAR(255) NOT NULL,
+  movie_id BIGINT NOT NULL,
+  status ENUM('WAANA', 'WATCHED') NOT NULL,
+  FOREIGN KEY (user_name) REFERENCES users(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (movie_id) REFERENCES movies(movie_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  PRIMARY KEY (user_name, movie_id)
+);
+
+CREATE TABLE comments (
+  comment_id int AUTO_INCREMENT PRIMARY KEY,
+  user_name VARCHAR(255) NOT NULL,
+  movie_id BIGINT NOT NULL,
+  content TEXT NOT NULL,
+  time DATETIME NOT NULL,
+  comment_to BIGINT DEFAULT NULL,
+  FOREIGN KEY (user_name) REFERENCES users(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (movie_id) REFERENCES movies(movie_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE commentslikes (
+  user_name VARCHAR(255) NOT NULL,
+  comment_id int NOT NULL,
+  FOREIGN KEY (user_name) REFERENCES users(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (comment_id) REFERENCES comments(comment_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  PRIMARY KEY (user_name, comment_id)
+);
+
+CREATE TABLE stars (
+  user_name VARCHAR(255) NOT NULL,
+  movie_id BIGINT NOT NULL,
+  start int NOT NULL,
+  FOREIGN KEY (user_name) REFERENCES users(user_name) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (movie_id) REFERENCES movies(movie_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  PRIMARY KEY (user_name, movie_id)
+);
+
+SHOW TABLES;
+
 DESC movies;
+DESC users;
+DESC bookmarks;
+DESC comments;
+DESC commentslikes;
+DESC stars;
 
 SELECT * FROM movies LIMIT 10;
+
+ALTER TABLE movies ADD score DOUBLE DEFAULT 0;
 
 ALTER TABLE movies
 DROP COLUMN vote_num,
